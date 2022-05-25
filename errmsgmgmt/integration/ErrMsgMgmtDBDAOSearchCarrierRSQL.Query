@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+	<querys>
+		<query name="JooCarrierMgmtDBDAOSearchRLaneCdRSQL">
+			<desc><![CDATA[get data for combo R.Lane Code]]></desc>
+			<sql><![CDATA[
+SELECT DISTINCT JO_CRR_CD
+FROM JOO_CARRIER 
+ORDER BY JO_CRR_CD ASC			]]></sql>
+			<params>
+			</params>
+		</query>
+	</querys>
+</sqls>

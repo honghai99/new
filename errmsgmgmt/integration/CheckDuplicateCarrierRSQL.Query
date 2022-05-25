@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+	<querys>
+		<query name="JooCarrierMgmtDBDAOSearchTrdCdRSQL">
+			<desc><![CDATA[Search Trade Code]]></desc>
+			<sql><![CDATA[
+SELECT A.JO_CRR_CD
+FROM JOO_CARRIER A
+WHERE A.JO_CRR_CD = @[jo_crr_cd]
+AND A.RLANE_CD  = @[rlane_cd]			]]></sql>
+			<params>
+				<param name="jo_crr_cd" type="12" value="" out="N"/>
+				<param name="rlane_cd" type="12" value="" out="N"/>
+			</params>
+		</query>
+	</querys>
+</sqls>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+	<querys>
+		<query name="ErrMsgMgmtDBDAOErrMsgVOUSQL">
+			<desc><![CDATA[   ]]></desc>
+			<sql><![CDATA[
+UPDATE JOO_CARRIER SET 
+	JO_CRR_CD = @[jo_crr_cd]
+,	RLANE_CD = @[rlane_cd]
+,	VNDR_SEQ = @[vndr_seq]
+,	CUST_CNT_CD = @[cust_cnt_cd]
+,	CUST_SEQ = @[cust_seq]
+,	TRD_CD = @[trd_cd]
+,	DELT_FLG = NVL(@[delt_flg],'N')
+,	UPD_DT = SYSDATE
+,	UPD_USR_ID = @[upd_usr_id]
+WHERE	JO_CRR_CD = @[jo_crr_cd]
+AND	RLANE_CD = @[rlane_cd]			]]></sql>
+			<params>
+				<param name="jo_crr_cd" type="12" value="" out="N"/>
+				<param name="rlane_cd" type="12" value="" out="N"/>
+				<param name="vndr_seq" type="12" value="" out="N"/>
+				<param name="cust_cnt_cd" type="12" value="" out="N"/>
+				<param name="cust_seq" type="12" value="" out="N"/>
+				<param name="trd_cd" type="12" value="" out="N"/>
+				<param name="delt_flg" type="12" value="" out="N"/>
+				<param name="upd_usr_id" type="12" value="" out="N"/>
+			</params>
+		</query>
+	</querys>
+</sqls>

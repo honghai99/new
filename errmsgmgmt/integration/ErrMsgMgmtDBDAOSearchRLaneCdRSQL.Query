@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+	<querys>
+		<query name="ErrMsgMgmtDBDAOSearchRLaneCdRSQL">
+			<desc><![CDATA[get data for combo R.Lane Code]]></desc>
+			<sql><![CDATA[
+SELECT A.RLANE_CD 
+FROM JOO_CARRIER A
+GROUP BY A.RLANE_CD 
+ORDER BY A.RLANE_CD			]]></sql>
+			<params>
+			</params>
+		</query>
+	</querys>
+</sqls>

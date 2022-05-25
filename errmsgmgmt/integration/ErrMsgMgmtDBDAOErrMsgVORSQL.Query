@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+	<querys>
+		<query name="ErrMsgMgmtDBDAOErrMsgVORSQL">
+			<desc><![CDATA[Retrieve
+   ]]></desc>
+			<sql><![CDATA[
+SELECT A.JO_CRR_CD      
+     , A.RLANE_CD      
+     , A.VNDR_SEQ      
+     , A.CUST_CNT_CD      
+     , A.CUST_SEQ      
+     , A.TRD_CD      
+     , A.DELT_FLG      
+     , TO_CHAR(A.CRE_DT, 'YYYY/MM/DD HH24:MI:SS') AS CRE_DT      
+     , A.CRE_USR_ID      
+     , TO_CHAR(A.UPD_DT, 'YYYY/MM/DD HH24:MI:SS') AS UPD_DT      
+     , A.UPD_USR_ID      
+FROM JOO_CARRIER A
+WHERE 1 = 1
+#if (${jo_crr_cd} != '' && ${jo_crr_cd} != 'All') 
+AND A.JO_CRR_CD IN (
+	#foreach($key IN ${jo_crr_cds}) #if($velocityCount < $jo_crr_cds.size()) '$key', #else '$key' #end #end
+)
+#end
+#if (${rlane_cd} != '') 
+AND A.RLANE_CD = @[rlane_cd]
+#end
+#if (${vndr_seq} != '' ) 
+AND A.VNDR_SEQ Like @[vndr_seq] || '%'
+#end
+#if (${cre_dt_fm} != '') 
+AND A.CRE_DT >= TO_DATE(@[cre_dt_fm],'YYYY-MM-DD')
+#end
+#if (${cre_dt_to} != '') 
+AND A.CRE_DT <= TO_DATE(@[cre_dt_to]||' 23:59','YYYY-MM-DD HH24:MI')
+#end
+ORDER BY A.JO_CRR_CD			]]></sql>
+			<params>
+				<param name="rlane_cd" type="12" value="" out="N"/>
+				<param name="vndr_seq" type="12" value="" out="N"/>
+				<param name="cre_dt_fm" type="12" value="" out="N"/>
+				<param name="cre_dt_to" type="12" value="" out="N"/>
+			</params>
+		</query>
+	</querys>
+</sqls>
