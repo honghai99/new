@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen-definitions xmlns="http://www.cyberlogitec.com/screen-definitions">
+	<!-- Hai To : 2022-03-23 start -->
+    <screen name="GEN_TRN_0001">
+        <parameter key="title"    value="Error Message Management" direct="true"/>
+        <parameter key="body"     value="apps/opus/esm/clv/gentraining/errmsgmgmt/jsp/GEN_TRN_0001.jsp"/>
+    </screen>
+	<!-- Hai To : 2022-03-23 end -->
+
+	<!-- Hai To : 2022-03-25 start -->
+    <screen name="CLV_TRN_0001">
+        <parameter key="title"    value="Error Message Management" direct="true"/>
+        <parameter key="body"     value="apps/opus/esm/clv/clvtraining/errmsgmgmt/jsp/CLV_TRN_0001.jsp"/>
+    </screen>
+	<!-- Hai To : 2022-03-25 end -->
+
+	<!-- Hai To : 2022-04-06 start -->
+    <screen name="DOU_TRN_0003">
+        <parameter key="title"    value="UI Practice 2" direct="true"/>
+        <parameter key="body"     value="apps/opus/esm/clv/doutraining/errmsgmgmt/jsp/DOU_TRN_0003.jsp"/>
+    </screen>
+	<!-- Hai To : 2022-04-06 end -->
+
+	<!-- Hai To : 2022-05-05 start -->
+    <screen name="DOU_TRN_0004">
+        <parameter key="title"    value="Practice 4" direct="true"/>
+        <parameter key="body"     value="apps/opus/esm/clv/newgen/errmsgmgmt/jsp/DOU_TRN_0004.jsp"/>
+    </screen>
+    
+    <screen name="DOU_TRN_0004PU">
+        <parameter key="title"    value="Practice 4" direct="true"/>
+        <parameter key="body"     value="apps/opus/esm/clv/newgen/errmsgmgmt/jsp/DOU_TRN_0004-POPUP.jsp"/>
+    </screen>
+	<!-- Hai To : 2022-05-05 end -->
+
+</screen-definitions>

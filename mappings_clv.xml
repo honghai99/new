@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://www.cyberlogitec.com/mappings">
+	<!-- Hai To : 2022-03-23 start -->
+    <url-mapping url="GEN_TRN_0001.do" screen="GEN_TRN_0001.screen" >
+        <web-action-class>com.clt.apps.opus.esm.clv.gentraining.errmsgmgmt.event.GEN_TRN_0001HTMLAction</web-action-class>
+    </url-mapping>
+
+    <url-mapping url="GEN_TRN_0001GS.do" screen="com.clt.framework.core.controller.DefaultViewAdapter" >
+        <web-action-class>com.clt.apps.opus.esm.clv.gentraining.errmsgmgmt.event.GEN_TRN_0001HTMLAction</web-action-class>
+    </url-mapping>
+
+    <event-mapping>
+        <event-class>com.clt.apps.opus.esm.clv.gentraining.errmsgmgmt.event.GenTrn0001Event</event-class>
+        <service-action-class>com.clt.apps.opus.esm.clv.gentraining.GenTrainingSC</service-action-class>
+    </event-mapping>
+	<!-- Hai To : 2022-03-23 end -->
+
+	<!-- Hai To : 2022-03-25 start -->
+    <url-mapping url="CLV_TRN_0001.do" screen="CLV_TRN_0001.screen" >
+        <web-action-class>com.clt.apps.opus.esm.clv.clvtraining.errmsgmgmt.event.CLV_TRN_0001HTMLAction</web-action-class>
+    </url-mapping>
+
+    <url-mapping url="CLV_TRN_0001GS.do" screen="com.clt.framework.core.controller.DefaultViewAdapter" >
+        <web-action-class>com.clt.apps.opus.esm.clv.clvtraining.errmsgmgmt.event.CLV_TRN_0001HTMLAction</web-action-class>
+    </url-mapping>
+
+    <event-mapping>
+        <event-class>com.clt.apps.opus.esm.clv.clvtraining.errmsgmgmt.event.ClvTrn0001Event</event-class>
+        <service-action-class>com.clt.apps.opus.esm.clv.clvtraining.clvtrainingSC</service-action-class>
+    </event-mapping>
+	<!-- Hai To : 2022-03-25 end -->
+
+	<!-- Hai To : 2022-04-06 start -->
+    <url-mapping url="DOU_TRN_0003.do" screen="DOU_TRN_0003.screen" >
+        <web-action-class>com.clt.apps.opus.esm.clv.doutraining.errmsgmgmt.event.DOU_TRN_0003HTMLAction</web-action-class>
+    </url-mapping>
+
+    <url-mapping url="DOU_TRN_0003GS.do" screen="com.clt.framework.core.controller.DefaultViewAdapter" >
+        <web-action-class>com.clt.apps.opus.esm.clv.doutraining.errmsgmgmt.event.DOU_TRN_0003HTMLAction</web-action-class>
+    </url-mapping>
+
+    <event-mapping>
+        <event-class>com.clt.apps.opus.esm.clv.doutraining.errmsgmgmt.event.DouTrn0003Event</event-class>
+        <service-action-class>com.clt.apps.opus.esm.clv.doutraining.DouTrainingSC</service-action-class>
+    </event-mapping>
+	<!-- Hai To : 2022-04-06 end -->
+
+	<!-- Hai To : 2022-05-05 start -->
+    <url-mapping url="DOU_TRN_0004.do" screen="DOU_TRN_0004.screen" >
+        <web-action-class>com.clt.apps.opus.esm.clv.newgen.errmsgmgmt.event.DOU_TRN_0004HTMLAction</web-action-class>
+    </url-mapping>
+
+    <url-mapping url="DOU_TRN_0004GS.do" screen="com.clt.framework.core.controller.DefaultViewAdapter" >
+        <web-action-class>com.clt.apps.opus.esm.clv.newgen.errmsgmgmt.event.DOU_TRN_0004HTMLAction</web-action-class>
+    </url-mapping>
+
+    <event-mapping>
+        <event-class>com.clt.apps.opus.esm.clv.newgen.errmsgmgmt.event.DouTrn0004Event</event-class>
+        <service-action-class>com.clt.apps.opus.esm.clv.newgen.NewGenSC</service-action-class>
+    </event-mapping>
+    
+    <url-mapping url="DOU_TRN_0004PU.do" screen="DOU_TRN_0004PU.screen" >
+        <web-action-class>com.clt.apps.opus.esm.clv.newgen.errmsgmgmt.event.DOU_TRN_0004HTMLAction</web-action-class>
+    </url-mapping>
+    
+	<!-- Hai To : 2022-05-05 end -->
+
+</mappings>
