@@ -71,7 +71,8 @@
 			switch(srcName) {
 				//event fires when retrieve button is clicked				
 				case "btn_Save": //event fires when Save button is clicked, save new data
-					ComPopupOk();
+					comPopupOK();
+
 //					doActionIBSheet(sheetObjects[0], formObject, IBSAVE);
 					break;		
 				case "btn_Search": //event fires when Save button is clicked, save new data
@@ -157,30 +158,68 @@
 	function sheet1_OnDblClick(Row, Col, Value, CellX, CellY, CellW, CellH) {
 		 if (Value == 2) {
 			 var values = new Array();
+			 
 			 values[0] = sheetObjects[0].GetCellValue(Col, Value);
-			 ComPopUpReturnValue(values);
+
+			 rowColSelection(Col, Value)
 			 ComClosePopup(); 
 			 
 			
 		 }
 	}
-
-	function ComPopUpReturnValue(rArray){
- 		try{
-	 		if(!opener) {
-				opener=parent;
-	 		}
-	 		
-				opener.callbackNotFound(rArray);
-			
-			ComClosePopup(); 
- 		} catch (e) {
- 			ComShowMessage(e.message);
- 		}
- 		
- 	}
-
-
 	
+	var row = 0;
+	var col = 0;
+	
+	function rowColSelection(Col, Row) {
+		row = Row;
+		col = Col;
+	}
+
+	function comPopupOK() {
+//    	if(!opener){
+//		  opener=window;
+//    	}
+    	//@@2014-12-02버그수정 
+	   	var opener = window.dialogArguments;
+		if (!opener) opener = window.opener;
+		if (!opener) opener = parent;
+		
+		var formObject=document.form;
+//    	opener.document.form.saveflag.value="Y";
+    	var values = new Array();	 
+		values[0] = sheetObjects[0].GetCellValue(row, col);
+
+    	ComClosePopup(); 
+     }
+	
+	function ComClosePopup() {
+		if(win_opener_button_create_obj){
+			$(parent.document).find(".layer_popup,.layer_popup_bg").remove();
+			window.close();
+		} else {
+			
+			var parentW = "parent";
+			
+			//while (eval(parentW).name != "" && eval(parentW).name.toLowerCase().indexOf("frame") != -1){
+			while (eval(parentW).name != "" && top.document != eval(parentW).document && eval(parentW).name != "popiframe"){
+				parentW += ".parent";
+			}
+			
+
+			//drag handel show
+			if($(eval(parentW).document.body).find(".layer_popup").is(":visible")) {
+				$(eval(parentW).document.body).find(".layer_popup_drag").css("z-index","10");
+			}
+			
+			$(eval(parentW).document.body).find(".layer_popup_bgTop,.layer_popup_bgBtm").remove();
+			$(parent.document).find("html").removeClass("popupOpen");
+			$(parent.document).find(".layer_popup,.layer_popup_bg").remove();
+			
+//			PopUp에서 버튼을 사용해서  X 처리하게 되면 아래 주석을 푼다.
+//			$(document).find("html").removeClass("popupOpen");
+//			$(document).find(".layer_popup,.layer_popup_bg").remove();
+		}
+	}
 
 	
