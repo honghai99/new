@@ -1,4 +1,3 @@
-
 /*=========================================================
 *Copyright(c) 2022 CyberLogitec
 *@FileName : DOU_TRN_0004.js
@@ -214,7 +213,7 @@
 	
 	
 	/**
-	 * 
+	 * Initialize sheet
 	 * @param {object} sheetObj
 	 * @param {int}    sheetNo
 	 */
@@ -269,8 +268,8 @@
 						     { Type : "Combo", 	  Hidden : 0, Width : 100, Align : "Center", ColMerge : 0, SaveName : "rlane_cd",    KeyField : 1, Format : "", UpdateEdit : 0, InsertEdit : 1,  EditLen: 5   }, //rev lane
 						     { Type : "Text",	  Hidden : 0, Width : 100, Align : "Center", ColMerge : 0, SaveName : "vndr_seq",    KeyField : 1, Format : "", UpdateEdit : 1, InsertEdit : 1 , EditLen: 6   }, //vendor code
 						     { Type : "Text", 	  Hidden : 0, Width : 50,  Align : "Center", ColMerge : 0, SaveName : "cust_cnt_cd", KeyField : 1, Format : "", UpdateEdit : 1, InsertEdit : 1 , EditLen: 2   }, //Customer code
-						     { Type : "Text", 	  Hidden : 0, Width : 100, Align : "Center", ColMerge : 0, SaveName : "cust_seq",    KeyField : 1, Format : "", UpdateEdit : 1, InsertEdit : 1 , EditLen: 6   }, //customer code
-						     { Type : "Text",     Hidden : 0, Width : 70,  Align : "Center", ColMerge : 0, SaveName : "trd_cd", 	 KeyField : 0, Format : "", UpdateEdit : 1, InsertEdit : 1 , EditLen: 3   }, //trade
+						     { Type : "Popup", 	  Hidden : 0, Width : 100, Align : "Center", ColMerge : 0, SaveName : "cust_seq",    KeyField : 1, Format : "", UpdateEdit : 1, InsertEdit : 1 , EditLen: 6   }, //customer code
+						     { Type : "Popup",     Hidden : 0, Width : 70,  Align : "Center", ColMerge : 0, SaveName : "trd_cd", 	 KeyField : 0, Format : "", UpdateEdit : 1, InsertEdit : 1 , EditLen: 3   }, //trade
 						     { Type : "Combo",    Hidden : 0, Width : 70,  Align : "Center", ColMerge : 0, SaveName : "delt_flg", 	 KeyField : 0, Format : "", UpdateEdit : 1, InsertEdit : 1				  }, //delete flag
 						     { Type : "Text",     Hidden : 0, Width : 150, Align : "Center", ColMerge : 0, SaveName : "cre_dt", 	 KeyField : 0, Format : "", UpdateEdit : 0, InsertEdit : 0 				  }, //create date
 						     { Type : "Text", 	  Hidden : 0, Width : 180, Align : "Left",   ColMerge : 0, SaveName : "cre_usr_id",  KeyField : 0, Format : "", UpdateEdit : 0, InsertEdit : 0				  }, //create user ID
@@ -442,9 +441,30 @@
 			formObject.f_cmd.value		= COMMAND02;
 			var param = FormQueryString(formObject) + "&jo_crr_cd=" + sheetObj.GetCellValue(Row,"jo_crr_cd") + "&rlane_cd=" + sheetObj.GetCellValue(Row,"rlane_cd");
 			var sXml  = sheetObj.GetSearchData("DOU_TRN_0004GS.do", param,{sync:1});
-			var flag  = ComGetEtcData(sXml, "ISEXIST");
-			console.log(flag);
+			var flag  = ComGetEtcData(sXml, "updateDate");
+			var updateDate = new Date(flag);
+			var onSheetUpdateDate = new Date(sheetObj.GetCellValue(Row,"upd_dt"));	
+			selectRowCol(Row, Col);
+			
+			var flag = false;
+			if(updateDate.getTime() != onSheetUpdateDate.getTime()) {
+				let choice = confirm("Your gird is outdated. Do you want to reload your page?");
+				if(choice) {
+					doActionIBSheet(sheetObjects[0], formObject, IBSEARCH);
+					return true;
+				} else {
+					return false;
+				}
+			}			
 		}
+	}
+	
+	var row = 0; 
+	var col = 0;
+	
+	function selectRowCol(Row, Col) {
+		row = Row;
+		col = Col;
 	}
 
 	/**
@@ -500,30 +520,6 @@
 				creDtFm1 = document.getElementById("s_cre_dt_fm").value; // get value from date from
 				creDtTo1 = document.getElementById("s_cre_dt_to").value; // get value from date to
 				var compare = document.getElementById("s_cre_dt_to").value.replaceAll('-', '') - document.getElementById("s_cre_dt_fm").value.replaceAll('-',''); // take date to - date fr
-//				if (creDtFm.value != "" && creDtTo.value != "") { // if values in box search not blank and date to - date fr < 0
-//					if (compare < 0 && creDtFm1.match(regex) && creDtFm1.match(regex)) {
-//						ComShowCodeMessage("COM132905"); // show msg date fr cannot > than date to
-//						return false;
-//					}
-//		
-//					if (!creDtFm1.match(regex)) { // check date fr is invalid
-//						ComShowCodeMessage("COM132907");
-//						return false;
-//					}
-//		
-//					if (!creDtTo1.match(regex)) { // check date to is invalid
-//						ComShowCodeMessage("COM132907");
-//						return false;
-//					} else {
-//						return true;
-//					}
-//				} else if (creDtFm.value == "" && creDtTo.value != "") { // check date from if it was inserted
-//					ComShowCodeMessage("COM132908");
-//					return false;
-//				} else if (creDtFm.value != "" && creDtTo.value == "") {// check date to if it was inserted
-//					ComShowCodeMessage("COM132909");
-//					return false;
-//				}	
 				
 				if(creDtFm.value != "" && creDtTo.value != "" && creDtFm.value > creDtTo.value) {
 					ComShowCodeMessage("COM132905"); 
@@ -544,7 +540,7 @@
 	}
 	
 	/**
-	 * this function will fire when saved transaction end
+	 * This function will fire when saved transaction end
 	 * @param {String} code
 	 * @param {int}    msg
 	 */
@@ -554,11 +550,13 @@
 		doActionIBSheet(sheetObjects[0], document.form, IBSEARCH);
 	} 
 	
+	/**
+	 * It fires before saving dât
+	 * @param code
+	 * @param msg
+	 */
 	function sheet1_OnBeforeSave(code, msg) { 
-		var formObject = document.form;
-		formObject.f_cmd.value	= COMMAND02;
-		
-		
+		var formObject = document.form;	
 	} 
 	
 	/**
@@ -570,20 +568,10 @@
 	function sheet1_OnPopupClick(sheetObj, Row, Col) {
 		var formObject = document.form;
 		switch (sheetObj.ColSaveName(Col)) {
-//			case "cust_seq":
-//				var data = sheetObjects[0].GetCellValue(Col, 1);
-//				var sUrl = "/opuscntr/DOU_TRN_0004PU.do";
-//				doActionIBSheet(sheetObjects[0], formObject, IBSEARCH);
-//				//				ComOpenPopup(sUrl, 1000, 800,"get_value", "0,0", true);
-////				ComOpenWindowCenter('DOU_TRN_0004PU.do', 'setCustSeq', 800, 600);
-//				ComOpenPopup('DOU_TRN_0004PU.do', 1000, 800,"setCustSeq", "1,0,1", true );
-////				ComOpenWindow(sUrl, sWinName, sFeatures, true);
-////				ComOpenPopupWithTarget('/opuscntr/COM_ENS_071.do?ofc_pts_cd=ALL', 700, 520, "ofc_cd:s_ofc_cd", '0,0,1,1,1,1,1,1', true);
-////				ComOpenWindowCenter('/opuscntr/COM_ENS_071.do?ofc_pts_cd=ALL', '', 800, 600);
-////				ComOpenWindowCenter('SinhVienPU.do?s_khoahoc=' +data, '', 800, 600);
-//				break;
 			case "cust_seq":
+//				ComOpenPopup('/opuscntr/DOU_TRN_0004PU.do?', 900, 520, 'setCustCd', '1,0,1', true, false, Row, Col);
 				ComOpenPopup('/opuscntr/COM_ENS_041.do?', 900, 520, 'setCustCd', '1,0,1', true, false, Row, Col);
+		   		break;	
 				break;
 			case "trd_cd":
 				ComOpenPopup('/opuscntr/COM_COM_0012.do?', 900, 520, 'setTrdCd', '1,0,1', true, false, Row, Col);
@@ -591,21 +579,31 @@
 		}
 	}
 	
-//	function setCustCd(aryPopupData) {
-//		var formObject=document.form;
-//		sheetObjects[0].SetCellValue(aryPopupData[0], 4, aryPopupData[1]);
-//	}
-	
+
+	/**
+	 * Set value after clicking OK from popup
+	 * @param aryPopupData
+	 * @param row
+	 * @param col
+	 * @param sheetIdx
+	 */
 	function setCustCd(aryPopupData, row, col, sheetIdx){
 		var sheetObject=sheetObjects[0];
 		sheetObject.SetCellValue(row,"cust_cnt_cd",aryPopupData[0][3].substring(0,2));
 		sheetObject.SetCellValue(row,"cust_seq",aryPopupData[0][3].substring(2));
 	}
 	
+	/**
+	 * Set value after clicking OK from popup
+	 * @param aryPopupData
+	 * @param row
+	 * @param col
+	 * @param sheetIdx
+	 */
 	function setTrdCd(aryPopupData, row, col, sheetIdx){
 		var sheetObject=sheetObjects[0];
 		sheetObject.SetCellValue(row,col,aryPopupData[0][3]);
 	}
 	
-	
+
 	
