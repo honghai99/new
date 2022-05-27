@@ -499,7 +499,12 @@
 		}
 	}
 	
-
+	/**
+	 * Check validation for columns that user inserts in
+	 * @param sheetObj
+	 * @param Row
+	 * @param Col
+	 */
 	function validInSheet(sheetObj, Row, Col) {
 		var colName = sheetObj.ColSaveName(Col)
 		switch(colName) {
@@ -507,10 +512,11 @@
 			var vendorCodeRegex = /^(\d{6})$/;
 			var vendorCode = sheetObj.GetCellValue(Row,Col);
 			if(!vendorCode.match(vendorCodeRegex)) {				
-				alert("Vendor code should be inputed atlest 6 digit-number");
+				alert("Vendor code should be inputed at least 6 digit-number");
 				sheetObj.SetCellValue(Row,"vndr_seq","",0);			
 			}
 			break;
+			
 		case "cust_cnt_cd":
 			var customerRegex = /^[A-Z]{2}$/;
 			var customerCode = sheetObj.GetCellValue(Row,Col);
@@ -519,23 +525,24 @@
 				sheetObj.SetCellValue(Row,"cust_cnt_cd","",0);
 			}
 			break;	
+			
 		case "cust_seq": //vendor code
 			var customerRegexNumber = /^(\d{6})$/;
 			var vendorCodeNumber = sheetObj.GetCellValue(Row,Col);
 			if(!vendorCodeNumber.match(customerRegexNumber)) {				
-				alert("Customer code should be inputed atlest 6 digit-number");
+				alert("Customer code should be inputed at least 6 digit-number");
 				sheetObj.SetCellValue(Row,"cust_seq","",0);			
 			}
 			break;
+			
 		case "trd_cd": //vendor code
 			var tradeRegex = /^[A-Z]{3}$/;
 			var tradeCode = sheetObj.GetCellValue(Row,Col);
 			if(!tradeCode.match(tradeRegex)) {				
-				alert("Trade should be inputed atlest 6 digit-number");
+				alert("Trade should be inputed at least 6 digit-number");
 				sheetObj.SetCellValue(Row,"trd_cd","",0);			
 			}
 			break;
-		
 		}	
 	}
 	
