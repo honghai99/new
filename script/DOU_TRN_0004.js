@@ -264,12 +264,12 @@
 					var cols = [ 
 						     { Type : "Status",   Hidden : 1, Width : 50,  Align : "Center", ColMerge : 0, SaveName : "ibflag" }, 
 						     { Type : "CheckBox", Hidden : 0, Width : 50,  Align : "Center", ColMerge : 0, SaveName : "del_chk" }, 
-						     { Type : "Text", 	  Hidden : 0, Width : 70,  Align : "Center", ColMerge : 0, SaveName : "jo_crr_cd", 	 KeyField : 1, Format : "", UpdateEdit : 0, InsertEdit : 1,  EditLen: 3   }, //carrier
+						     { Type : "Combo", 	  Hidden : 0, Width : 70,  Align : "Center", ColMerge : 0, SaveName : "jo_crr_cd", 	 KeyField : 1, Format : "", UpdateEdit : 0, InsertEdit : 1,  EditLen: 3   }, //carrier
 						     { Type : "Combo", 	  Hidden : 0, Width : 100, Align : "Center", ColMerge : 0, SaveName : "rlane_cd",    KeyField : 1, Format : "", UpdateEdit : 0, InsertEdit : 1,  EditLen: 5   }, //rev lane
 						     { Type : "Text",	  Hidden : 0, Width : 100, Align : "Center", ColMerge : 0, SaveName : "vndr_seq",    KeyField : 1, Format : "", UpdateEdit : 1, InsertEdit : 1 , EditLen: 6   }, //vendor code
 						     { Type : "Text", 	  Hidden : 0, Width : 50,  Align : "Center", ColMerge : 0, SaveName : "cust_cnt_cd", KeyField : 1, Format : "", UpdateEdit : 1, InsertEdit : 1 , EditLen: 2   }, //Customer code
-						     { Type : "Popup", 	  Hidden : 0, Width : 100, Align : "Center", ColMerge : 0, SaveName : "cust_seq",    KeyField : 1, Format : "", UpdateEdit : 1, InsertEdit : 1 , EditLen: 6   }, //customer code
-						     { Type : "Popup",     Hidden : 0, Width : 70,  Align : "Center", ColMerge : 0, SaveName : "trd_cd", 	 KeyField : 0, Format : "", UpdateEdit : 1, InsertEdit : 1 , EditLen: 3   }, //trade
+						     { Type : "Text", 	  Hidden : 0, Width : 100, Align : "Center", ColMerge : 0, SaveName : "cust_seq",    KeyField : 1, Format : "", UpdateEdit : 1, InsertEdit : 1 , EditLen: 6   }, //customer code
+						     { Type : "Text",     Hidden : 0, Width : 70,  Align : "Center", ColMerge : 0, SaveName : "trd_cd", 	 KeyField : 0, Format : "", UpdateEdit : 1, InsertEdit : 1 , EditLen: 3   }, //trade
 						     { Type : "Combo",    Hidden : 0, Width : 70,  Align : "Center", ColMerge : 0, SaveName : "delt_flg", 	 KeyField : 0, Format : "", UpdateEdit : 1, InsertEdit : 1				  }, //delete flag
 						     { Type : "Text",     Hidden : 0, Width : 150, Align : "Center", ColMerge : 0, SaveName : "cre_dt", 	 KeyField : 0, Format : "", UpdateEdit : 0, InsertEdit : 0 				  }, //create date
 						     { Type : "Text", 	  Hidden : 0, Width : 180, Align : "Left",   ColMerge : 0, SaveName : "cre_usr_id",  KeyField : 0, Format : "", UpdateEdit : 0, InsertEdit : 0				  }, //create user ID
@@ -286,6 +286,7 @@
 					SetColProperty("cust_seq",	  { AcceptKeys : "N"});
 					SetColProperty("trd_cd", 	  { AcceptKeys : "E", InputCaseSensitive : 1 });
 					SetColProperty("rlane_cd", 	  { ComboText  : lane,  ComboCode : lane });
+					SetColProperty("jo_crr_cd",   { ComboText  : carriers,  ComboCode : carriers });
 					SetColProperty("delt_flg", 	  { ComboText  : "N|Y", ComboCode : "N|Y" });
 					resizeSheet();
 				}
@@ -354,7 +355,7 @@
 			case IBDOWNEXCEL:	
 				if(sheetObj.RowCount() < 1){
 					ComShowCodeMessage("COM132501");
-				}else{
+				} else {
 					sheetObj.Down2Excel({DownCols: makeHiddenSkipCol(sheetObj), SheetDesign:1, Merge:1});
 				}
 				break;
@@ -372,7 +373,6 @@
 	function sheet1_OnSearchEnd(sheetObj, Code, Msg, StCode, StMsg) { 
 	 	ComOpenWait(false);	 	
 	}
-	
 	
 	
 	/**
@@ -438,34 +438,31 @@
 				}
 			}
 		} else {
-			formObject.f_cmd.value		= COMMAND02;
-			var param = FormQueryString(formObject) + "&jo_crr_cd=" + sheetObj.GetCellValue(Row,"jo_crr_cd") + "&rlane_cd=" + sheetObj.GetCellValue(Row,"rlane_cd");
-			var sXml  = sheetObj.GetSearchData("DOU_TRN_0004GS.do", param,{sync:1});
-			var flag  = ComGetEtcData(sXml, "updateDate");
-			var updateDate = new Date(flag);
-			var onSheetUpdateDate = new Date(sheetObj.GetCellValue(Row,"upd_dt"));	
-			selectRowCol(Row, Col);
-			
-			var flag = false;
-			if(updateDate.getTime() != onSheetUpdateDate.getTime()) {
-				let choice = confirm("Your gird is outdated. Do you want to reload your page?");
-				if(choice) {
-					doActionIBSheet(sheetObjects[0], formObject, IBSEARCH);
-					return true;
-				} else {
-					return false;
+			if(sheetObj.GetCellValue(Row,"ibflag") == "U") {
+				formObject.f_cmd.value		= COMMAND02;
+				var param = FormQueryString(formObject) + "&jo_crr_cd=" + sheetObj.GetCellValue(Row,"jo_crr_cd") + "&rlane_cd=" + sheetObj.GetCellValue(Row,"rlane_cd");
+				var sXml  = sheetObj.GetSearchData("DOU_TRN_0004GS.do", param,{sync:1});
+				var flag  = ComGetEtcData(sXml, "ISEXIST");
+				var updateDate = new Date(flag);
+				var onSheetUpdateDate = new Date(sheetObj.GetCellValue(Row,"upd_dt"));	
+				
+				var flag = false;
+				if(updateDate.getTime() != onSheetUpdateDate.getTime()) {
+					let choice = confirm("Your gird is outdated. Do you want to reload your page?");
+					if(choice) {
+						doActionIBSheet(sheetObjects[0], formObject, IBSEARCH);
+						return true;
+					} else {
+						return false;
+					}
 				}
+				validInSheet(sheetObj, Row, Col);
+			} else if (sheetObj.GetCellValue(Row,"ibflag") == "I") {
+				validInSheet(sheetObj, Row, Col);
 			}			
 		}
 	}
 	
-	var row = 0; 
-	var col = 0;
-	
-	function selectRowCol(Row, Col) {
-		row = Row;
-		col = Col;
-	}
 
 	/**
 	 * Event fires when partner combobox is clicked 
@@ -503,6 +500,44 @@
 	}
 	
 
+	function validInSheet(sheetObj, Row, Col) {
+		var colName = sheetObj.ColSaveName(Col)
+		switch(colName) {
+		case "vndr_seq": //vendor code
+			var vendorCodeRegex = /^(\d{6})$/;
+			var vendorCode = sheetObj.GetCellValue(Row,Col);
+			if(!vendorCode.match(vendorCodeRegex)) {				
+				alert("Vendor code should be inputed atlest 6 digit-number");
+				sheetObj.SetCellValue(Row,"vndr_seq","",0);			
+			}
+			break;
+		case "cust_cnt_cd":
+			var customerRegex = /^[A-Z]{2}$/;
+			var customerCode = sheetObj.GetCellValue(Row,Col);
+			if(!customerCode.match(customerRegex)) {				
+				alert("Customer code should be inputed 2 letters");
+				sheetObj.SetCellValue(Row,"cust_cnt_cd","",0);
+			}
+			break;	
+		case "cust_seq": //vendor code
+			var customerRegexNumber = /^(\d{6})$/;
+			var vendorCodeNumber = sheetObj.GetCellValue(Row,Col);
+			if(!vendorCodeNumber.match(customerRegexNumber)) {				
+				alert("Customer code should be inputed atlest 6 digit-number");
+				sheetObj.SetCellValue(Row,"cust_seq","",0);			
+			}
+			break;
+		case "trd_cd": //vendor code
+			var tradeRegex = /^[A-Z]{3}$/;
+			var tradeCode = sheetObj.GetCellValue(Row,Col);
+			if(!tradeCode.match(tradeRegex)) {				
+				alert("Trade should be inputed atlest 6 digit-number");
+				sheetObj.SetCellValue(Row,"trd_cd","",0);			
+			}
+			break;
+		
+		}	
+	}
 	
 	/**
 	 * Validate the input of user
@@ -540,24 +575,30 @@
 	}
 	
 	/**
-	 * This function will fire when saved transaction end
-	 * @param {String} code
-	 * @param {int}    msg
-	 */
-	function sheet1_OnSaveEnd(code, msg) { 
-		//thường check message ở server side - specify, modify data.
-		ComOpenWait(false);
-		doActionIBSheet(sheetObjects[0], document.form, IBSEARCH);
-	} 
-	
-	/**
-	 * It fires before saving dât
+	 * It fires before saving data
 	 * @param code
 	 * @param msg
 	 */
 	function sheet1_OnBeforeSave(code, msg) { 
 		var formObject = document.form;	
 	} 
+	
+	/**
+	 * This function will fire when saved transaction end
+	 * @param {String} code
+	 * @param {int}    msg
+	 */
+	function sheet1_OnSaveEnd(code, msg) { 
+		//thường check message ở server side - specify, modify data.
+		if(msg>0) {
+			ComOpenWait(false);
+			doActionIBSheet(sheetObjects[0], document.form, IBSEARCH);
+		} else {
+			ComOpenWait(false);	
+		}
+	} 
+	
+
 	
 	/**
 	 * For additional issue 
